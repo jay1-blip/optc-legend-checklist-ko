@@ -241,47 +241,11 @@ function resetPage() {
   });
   //clears local storage
   localStorage.clear();
-  $('#show-hidden').html('Unhide All Removed Legends (' + $('.disabled').length + ')');
+  $('#show-hidden').html('지운 캐릭터 복구 (' + $('.disabled').length + ')');
 }
 
 //unique legend tracker
 function countLegends() {
-  var disabled = $('.disabled');
-  var unique = $('#special .flair:not(.base)');
-
-  var selected = $('.selected');
-  var pairs = [];
-  var baseArray = [];
-  var disabledArray = [];
-
-  //maps evos with base
-  var baseMap = base.reduce(function(map, obj) {
-      map[obj.evo] = obj.base;
-      return map;
-  }, {});
-
-  //pushes IDs to new array
-  for(var i = 0; i < selected.length; i++) {
-    pairs.push(selected[i].id);
-  }
-
-  for(var k = 0; k < base.length; k++) {
-    baseArray.push(base[k]['base']);
-    baseArray.push(base[k]['evo']);
-  }
-
-  //push IDs to disabled array to pass as argument later
-  for(var j = 0; j < disabled.length; j++) {
-    if(baseArray.includes(parseInt(disabled[j].id)))
-      disabledArray.push(disabled[j].id);
-  }
-
-  //creates new set and returns size
-  function countUnique(arg) {
-    return new Set(arg.map (x => baseMap.hasOwnProperty(x)? baseMap[x].toString() : x)).size;
-  }
-  //subtracting 1 from total to account for log luffy stuff?
-  $('#counter').html("<span class='cl'>Unique Legends - </span>" + countUnique(pairs) + "/" + (countUnique(unique) - (disabled.length - countUnique(disabledArray)) - 1));
   countLegends2();
 }
 
@@ -291,7 +255,7 @@ function countLegends2() {
   var total = $("#special .flair").length;
   var disabled = $('.disabled').length;
 
-  $('#counter2').html("<span class='cl'>Total Legends - </span>" + amount + "/" + (total-disabled));
+  $('#counter2').html("<span class='cl'>전체 캐릭터 - </span>" + amount + "/" + (total-disabled));
   countRainbows();
   countSrainbows();
 }
@@ -303,7 +267,7 @@ function countRainbows() {
   var total = $("#special .flair").length;
   var disabled = $('.disabled').length;
 
-  $('#rainbow').html("<span class='cl'>Rainbowed - </span>" + (amount + amount2) + "/" + (total-disabled));
+  $('#rainbow').html("<span class='cl'>무지개 - </span>" + (amount + amount2) + "/" + (total-disabled));
 }
 
 //super rainbow tracker
@@ -312,7 +276,7 @@ function countSrainbows() {
   var total = $("#special .flair").length;
   var disabled = $('.disabled').length;
 
-  $('#srainbow').html("<span class='cl'>Super Rainbowed - </span>" + amount + "/" + (total-disabled));
+  $('#srainbow').html("<span class='cl'>초무지개 - </span>" + amount + "/" + (total-disabled));
 }
 
 //un-hides all hidden legends
@@ -323,7 +287,7 @@ function showHidden() {
     localStorage.removeItem(disabled[i].id);
   }
   $(".disabled").toggleClass("disabled");
-  $('#show-hidden').html('Unhide All Removed Legends (' + $('.disabled').length + ')');
+  $('#show-hidden').html('지운 캐릭터 복구 (' + $('.disabled').length + ')');
 }
 
 //unhides specific Legends
@@ -357,7 +321,7 @@ function listHidden() {
     //removes from local storage
     localStorage.removeItem(id);
     //updates counters
-    $('#show-hidden').html('Unhide All Removed Legends (' + $('.disabled').length + ')');
+    $('#show-hidden').html('지운 캐릭터 복구 (' + $('.disabled').length + ')');
     countLegends();
   });
 }
@@ -440,7 +404,7 @@ function generateImage() {
 //download feature
 function download() {
   domtoimage.toBlob($('.icon-container')[0]).then(function (blob) {
-        window.saveAs(blob, 'checklist.jpg');
+        window.saveAs(blob, 'OPTC-체크리스트.jpg');
     });
 }
 
@@ -523,7 +487,7 @@ jQuery(document).ready(function($) {
   countLegends();
 
   //restores hidden legend counter upon page load - must be placed under updatePage()
-  $('#show-hidden').html('Unhide All Removed Legends (' + $('.disabled').length + ')');
+  $('#show-hidden').html('지운 캐릭터 복구 (' + $('.disabled').length + ')');
 
   //makes sure only one toggle can be flipped at a time
   $("#switch").on("change", function(){
@@ -589,7 +553,7 @@ jQuery(document).ready(function($) {
       countLegends();
 
       //shows counter of hidden legends
-      $('#show-hidden').html('Unhide All Removed Legends (' + $('.disabled').length + ')');
+      $('#show-hidden').html('지운 캐릭터 복구 (' + $('.disabled').length + ')');
     }
     //super rainbow toggle
     else if(isChecked3){

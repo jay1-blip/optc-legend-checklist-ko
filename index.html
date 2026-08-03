@@ -27,12 +27,10 @@
 </head>
 
 <body>
-  <noscript>JavaScript is required to run this page.</noscript>
+  <noscript>이 페이지를 사용하려면 JavaScript를 활성화해야 합니다.</noscript>
 
   <div class="header"></div>
   <div class="update-note">한국어 DB 기준 최신 ★6/★6+ 캐릭터 체크리스트 · 캐릭터에 마우스를 올리면 이름과 번호가 표시됩니다.</div>
-  <span id="counter"></span>
-  <br>
   <span id="counter2"></span>
   <br>
   <span id="rainbow"></span>
@@ -40,22 +38,22 @@
   <span id="srainbow"></span>
 
   <div class="buttons">
-    <button id="select-all">Select All</button>
-    <button id="select-none">Reset</button>
-    <button id="show-base">Show ★6 Forms of Super-Evos</button>
-    <button id="hide-base">Hide ★6 Forms of Super-Evos</button>
-    <button id="show-hidden">Unhide Removed Legends</button>
-    <button id="list-hidden">List Removed Legends</button>
-    <button id="generate" onclick="generateImage()">Generate Image</button>
-    <button onclick="toggleModal3()">Import/Export</button>
+    <button id="select-all">전체선택</button>
+    <button id="select-none">초기화</button>
+    <button id="show-base">초진화 전 캐릭터 표시</button>
+    <button id="hide-base">초진화 목록에서 제거</button>
+    <button id="show-hidden">지운 캐릭터 복구</button>
+    <button id="list-hidden">지운 캐릭터 목록</button>
+    <button id="generate" onclick="generateImage()">이미지로 추출</button>
+    <button onclick="toggleModal3()">가져오기/내보내기</button>
   </div>
 
   <div class="modal">
     <div class="modal-container">
       <div class="modal-header">
-        <span class="modal-text">Image Export</span>
-        <button id="image-download" onclick="download()">Download Image</button>
-        <p><i>(otherwise, <code>right-click > copy</code>)</i></p>
+        <span class="modal-text">이미지로 추출</span>
+        <button id="image-download" onclick="download()">이미지 다운로드</button>
+        <p><i>(또는 이미지에서 <code>우클릭 &gt; 복사</code>)</i></p>
         <span class="close-btn">&times;</span>
       </div>
       <div class="modal-content"></div>
@@ -65,8 +63,8 @@
   <div class="modal2">
     <div class="modal-container">
       <div class="modal-header">
-        <span class="modal-text">Removed Legends</span>
-        <p><i>(Click icons to unhide legends)</i></p>
+        <span class="modal-text">지운 캐릭터 목록</span>
+        <p><i>(복구할 캐릭터 아이콘을 클릭하세요)</i></p>
         <span class="close-btn2">&times;</span>
       </div>
       <div class="modal-content2"></div>
@@ -76,18 +74,18 @@
   <div class="modal3">
     <div class="modal-container">
       <div class="modal-header">
-        <span class="modal-text">Import/Export Checklist</span>
+        <span class="modal-text">체크리스트 가져오기/내보내기</span>
         <span class="close-btn3">&times;</span>
       </div>
       <div class="modal-content3">
-        <p class="warning">WARNING: Importing WILL overwrite your current checklist.</p>
-        <button id="import" onclick="toggleImport()">Import Checklist</button>
-        <button id="export" onclick="exportSelection()">Export Checklist</button>
-        <input type="text" id="import-text"><button id="apply-import" onclick="importSelection()">Apply</button>
-        <input type="text" id="export-text" onclick="this.setSelectionRange(0, this.value.length)"><button id="copy-export" onclick="copySelection()">Copy</button>
-        <div id="display-copied">Copied to clipboard!</div>
-        <div id="imported">Checklist imported!</div>
-        <div id="undefined">Invalid data, please generate a new export</div>
+        <p class="warning">주의: 가져오기를 실행하면 현재 체크리스트를 덮어씁니다.</p>
+        <button id="import" onclick="toggleImport()">체크리스트 가져오기</button>
+        <button id="export" onclick="exportSelection()">체크리스트 내보내기</button>
+        <input type="text" id="import-text" aria-label="가져올 체크리스트 데이터"><button id="apply-import" onclick="importSelection()">적용</button>
+        <input type="text" id="export-text" aria-label="내보낼 체크리스트 데이터" onclick="this.setSelectionRange(0, this.value.length)"><button id="copy-export" onclick="copySelection()">복사</button>
+        <div id="display-copied">클립보드에 복사했습니다.</div>
+        <div id="imported">체크리스트를 가져왔습니다.</div>
+        <div id="undefined">올바르지 않은 데이터입니다. 다시 내보내 주세요.</div>
       </div>
     </div>
   </div>
@@ -97,25 +95,25 @@
       <input id="switch" type="checkbox">
       <span class="slider round"></span>
     </label>
-    <span class="tooltip">- rainbow mode</span>
+    <span class="tooltip">- 무지개</span>
 
     <label class="switch3">
       <input id="switch2" type="checkbox">
       <span class="slider round"></span>
     </label>
-    <span class="tooltip3">- super rainbow mode</span>
+    <span class="tooltip3">- 초무지개</span>
 
     <label class="switch2">
       <input id="check4" type="checkbox">
       <span class="slider round"></span>
     </label>
-    <span class="tooltip2">- LLB mode </span>
+    <span class="tooltip2">- 레벨상한돌파</span>
 
     <label class="switch4">
       <input id="hide-legends" type="checkbox">
       <span class="slider round"></span>
     </label>
-    <span class="tooltip4">- remove legends from list</span>
+    <span class="tooltip4">- 목록에서 캐릭터 제거</span>
 
       <div class="icon-container">
         <div id="special"></div>
@@ -123,15 +121,5 @@
   </div>
 
 </body>
-
-<footer>
-  <div>
-    2019 -
-    <script>
-    document.write(new Date().getFullYear());
-    </script>.
-    Created by <a href="https://www.reddit.com/user/antonlabz/">antonlabz</a>. Maintained by <a href="http://www.reddit.com/message/compose/?to=CubeoHS&subject=OPTC%20Legend%20Checklist">CubeoHS</a>.
-  </div>
-</footer>
 
 </html>
