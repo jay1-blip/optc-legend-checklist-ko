@@ -1,12 +1,9 @@
 {
   "sourceDatabase": "C:\\Users\\jay15\\Documents\\New project\\optcDB_Ko-main",
-  "legendCount": 562,
+  "legendCount": 554,
   "uniqueEvolutionGroups": 135,
   "superEvolutionPairs": 135,
-  "missingIcons": [
-    "4614",
-    "4615",
-    "4616"
-  ],
+  "excludedIds": [591, 592, 593, 594, 595, 963, 964, 965],
+  "missingIcons": [],
   "selectionRule": "units.js entries whose stars value is 6 or 6+"
 }
