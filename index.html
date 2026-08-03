@@ -31,11 +31,11 @@
 
   <div class="header"></div>
   <div class="update-note">한국어 DB 기준 최신 ★6/★6+ 캐릭터 체크리스트 · 캐릭터에 마우스를 올리면 이름과 번호가 표시됩니다.</div>
-  <span id="counter2"></span>
-  <br>
-  <span id="rainbow"></span>
-  <br>
-  <span id="srainbow"></span>
+  <div class="counter-row" aria-label="체크리스트 현황">
+    <span id="counter2" class="counter-item"></span>
+    <span id="rainbow" class="counter-item"></span>
+    <span id="srainbow" class="counter-item"></span>
+  </div>
 
   <div class="buttons">
     <button id="select-all">전체선택</button>
@@ -91,29 +91,31 @@
   </div>
 
   <div class="container2">
-    <label class="switch">
-      <input id="switch" type="checkbox">
-      <span class="slider round"></span>
-    </label>
-    <span class="tooltip">- 무지개</span>
+    <div class="mode-controls">
+      <label class="mode-control">
+        <input id="switch" type="checkbox">
+        <span class="slider round"></span>
+        <span class="mode-text">무지개</span>
+      </label>
 
-    <label class="switch3">
-      <input id="switch2" type="checkbox">
-      <span class="slider round"></span>
-    </label>
-    <span class="tooltip3">- 초무지개</span>
+      <label class="mode-control">
+        <input id="switch2" type="checkbox">
+        <span class="slider round"></span>
+        <span class="mode-text">초무지개</span>
+      </label>
 
-    <label class="switch2">
-      <input id="check4" type="checkbox">
-      <span class="slider round"></span>
-    </label>
-    <span class="tooltip2">- 레벨상한돌파</span>
+      <label class="mode-control">
+        <input id="check4" type="checkbox">
+        <span class="slider round"></span>
+        <span class="mode-text">레벨상한돌파</span>
+      </label>
 
-    <label class="switch4">
-      <input id="hide-legends" type="checkbox">
-      <span class="slider round"></span>
-    </label>
-    <span class="tooltip4">- 목록에서 캐릭터 제거</span>
+      <label class="mode-control">
+        <input id="hide-legends" type="checkbox">
+        <span class="slider round"></span>
+        <span class="mode-text">목록에서 캐릭터 제거</span>
+      </label>
+    </div>
 
       <div class="icon-container">
         <div id="special"></div>
