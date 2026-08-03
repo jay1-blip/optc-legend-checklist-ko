@@ -4,6 +4,9 @@ text-align:center;
 background:url(../images/bg.jpg);
 background-attachment:fixed;
 background-size:cover;
+margin:0;
+min-width:0;
+overflow-x:hidden;
 }
 
 .flair {
@@ -33,9 +36,14 @@ box-shadow: 2px 2px 5px 2px #FF8080, -3px 2px 5px 2px #FFE488, -3px -2px 5px 2px
 }
 
 .buttons {
-display:block;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-wrap:wrap;
+gap:6px;
 position:relative;
 margin-top:10px;
+padding:0 10px;
 }
 
 #image-download {
@@ -75,6 +83,7 @@ padding-top:150px;
 
 .modal-container {
 max-width:1260px;
+width:calc(100% - 20px);
 margin:auto;
 }
 
@@ -275,8 +284,12 @@ border:1px solid #fff;
 
 .header {
 background-image:url(../images/header.png);
-width:428px;
-height:80px;
+background-position:center;
+background-repeat:no-repeat;
+background-size:contain;
+width:min(428px, calc(100% - 24px));
+aspect-ratio:428 / 80;
+height:auto;
 margin:20px auto auto;
 }
 
@@ -319,6 +332,8 @@ background:#502909;
 color:#fdf7d7;
 border:1px solid #ec965d;
 border-radius:2px;
+min-height:32px;
+padding:5px 9px;
 }
 
 div.btn-container {display:block!important}
@@ -401,4 +416,84 @@ border: 2px dashed #ff4747;
   border: 1px solid #b97a45;
   border-radius: 3px;
   font-size: 13px;
+}
+
+@media only screen and (max-width: 760px) {
+  body {
+    background-attachment:scroll;
+  }
+
+  .header {
+    margin-top:10px;
+  }
+
+  .update-note {
+    box-sizing:border-box;
+    width:calc(100% - 20px);
+    margin:4px 10px 6px;
+    font-size:12px;
+    line-height:1.45;
+  }
+
+  .counter-row {
+    box-sizing:border-box;
+  }
+
+  .buttons {
+    gap:7px;
+    padding:0 8px;
+  }
+
+  .buttons button {
+    flex:1 1 calc(50% - 7px);
+    min-height:42px;
+    font-size:13px;
+  }
+
+  .container2 {
+    box-sizing:border-box;
+    width:100%;
+    margin-top:14px;
+    padding:0 4px;
+  }
+
+  .mode-controls {
+    justify-content:center;
+    gap:8px 14px;
+    padding:0 6px;
+  }
+
+  .mode-control {
+    min-height:36px;
+  }
+
+  .icon-container {
+    border-width:2px;
+  }
+
+  .modal, .modal2, .modal3 {
+    box-sizing:border-box;
+    padding-top:12px;
+    overflow:auto;
+  }
+
+  .modal-container {
+    width:calc(100% - 12px);
+  }
+
+  .modal-header p {
+    display:none;
+  }
+
+  .modal-content, .modal-content2, .modal-content3 {
+    max-height:calc(100vh - 70px);
+    overflow:auto;
+  }
+
+  .warning {
+    position:static;
+    box-sizing:border-box;
+    max-width:calc(100% - 20px);
+    margin:0 auto 10px;
+  }
 }

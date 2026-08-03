@@ -9,13 +9,18 @@ for (let index = legendCharacters.length - 1; index >= 0; index -= 1) {
 
 loadPage = function() {
   const enter = document.getElementById('special');
-  legendCharacters.forEach(function(character) {
+  legendCharacters.forEach(function(character, index) {
     const wrapper = document.createElement('div');
     wrapper.className = 'flair-wrapper';
 
     const image = document.createElement('img');
     image.className = 'flair level-0';
     image.id = character.id;
+    image.loading = index < 28 ? 'eager' : 'lazy';
+    image.decoding = 'async';
+    image.setAttribute('fetchpriority', index < 12 ? 'high' : 'low');
+    image.width = 50;
+    image.height = 50;
     image.src = 'images/icons/' + character.id + '.png';
     image.alt = character.name;
     image.title = character.name + ' (No. ' + character.id + ', ★' + character.stars + ')';
