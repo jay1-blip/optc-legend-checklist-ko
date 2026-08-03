@@ -250,34 +250,41 @@ function countLegends() {
   countLegends2();
 }
 
+function getVisibleLegends() {
+  return $("#special .flair").filter(function() {
+    var wrapper = $(this).parent();
+    return !wrapper.hasClass("hidden") && !wrapper.hasClass("disabled");
+  });
+}
+
 //total legend tracker
 function countLegends2() {
-  var amount = $(".selected").length;
-  var total = $("#special .flair").length;
-  var disabled = $('.disabled').length;
+  var visible = getVisibleLegends();
+  var amount = visible.filter(".selected").length;
+  var total = visible.length;
 
-  $('#counter2').html("<span class='cl'>전체 캐릭터 - </span>" + amount + "/" + (total-disabled));
+  $('#counter2').html("<span class='cl'>전체 캐릭터 - </span>" + amount + "/" + total);
   countRainbows();
   countSrainbows();
 }
 
 //rainbow tracker
 function countRainbows() {
-  var amount = $(".rainbow").length;
-  var amount2 = $(".srainbow").length;
-  var total = $("#special .flair").length;
-  var disabled = $('.disabled').length;
+  var visible = getVisibleLegends();
+  var amount = visible.filter(".rainbow").length;
+  var amount2 = visible.filter(".srainbow").length;
+  var total = visible.length;
 
-  $('#rainbow').html("<span class='cl'>무지개 - </span>" + (amount + amount2) + "/" + (total-disabled));
+  $('#rainbow').html("<span class='cl'>무지개 - </span>" + (amount + amount2) + "/" + total);
 }
 
 //super rainbow tracker
 function countSrainbows() {
-  var amount = $(".srainbow").length;
-  var total = $("#special .flair").length;
-  var disabled = $('.disabled').length;
+  var visible = getVisibleLegends();
+  var amount = visible.filter(".srainbow").length;
+  var total = visible.length;
 
-  $('#srainbow').html("<span class='cl'>초무지개 - </span>" + amount + "/" + (total-disabled));
+  $('#srainbow').html("<span class='cl'>초무지개 - </span>" + amount + "/" + total);
 }
 
 //un-hides all hidden legends
@@ -645,6 +652,7 @@ jQuery(document).ready(function($) {
     $('#show-base').css('display', 'none');
     $('#hide-base').css('display', 'inline-block');
     updateStorage("evohidden", null, false);
+    countLegends();
   });
 
   //shows base forms of legends with super-evos
@@ -653,5 +661,6 @@ jQuery(document).ready(function($) {
     $('#hide-base').css('display', 'none');
     $('#show-base').css('display', 'inline-block');
     updateStorage("evohidden", 'true', true);
+    countLegends();
   });
 });
