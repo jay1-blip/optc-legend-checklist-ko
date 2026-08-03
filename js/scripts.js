@@ -175,9 +175,9 @@ function updatePage() {
     else if(elem['value'] == 'srainbow')
       $("#" + elem.key).addClass("srainbow selected");
     else if(elem['value'] == 'hidden')
-      $("#" + elem.key).addClass("disabled");
+      $("#" + elem.key).parent().addClass("disabled");
     else if (elem['value'] == 'true'){
-      $('.base').toggleClass('hidden');
+      $('.base').parent().addClass('hidden');
       $('#hide-base').css('display', 'none');
       $('#show-base').css('display', 'inline-block');
     }
@@ -237,8 +237,9 @@ function resetPage() {
     $("#" + elem.key).removeClass("selected");
     $("#" + elem.key).removeClass("rainbow");
     $("#" + elem.key).removeClass("srainbow");
-    $("#" + elem.key).removeClass("disabled");
+    $("#" + elem.key).parent().removeClass("disabled hidden");
   });
+  $(".flair-wrapper").removeClass("disabled hidden");
   //clears local storage
   localStorage.clear();
   $('#show-hidden').html('지운 캐릭터 복구 (' + $('.disabled').length + ')');
@@ -284,9 +285,12 @@ function showHidden() {
   var disabled = $(".disabled");
 
   for(var i = 0; i < disabled.length; i++) {
-    localStorage.removeItem(disabled[i].id);
+    var hiddenFlair = disabled[i].querySelector('.flair');
+    if(hiddenFlair) {
+      localStorage.removeItem(hiddenFlair.id);
+    }
   }
-  $(".disabled").toggleClass("disabled");
+  $(".disabled").removeClass("disabled");
   $('#show-hidden').html('지운 캐릭터 복구 (' + $('.disabled').length + ')');
 }
 
@@ -547,7 +551,7 @@ jQuery(document).ready(function($) {
       $obj.removeClass("srainbow");
       $obj.removeClass("selected");
 
-      const save = $obj.hasClass("disabled");
+      const save = $obj.parent().hasClass("disabled");
 
       updateStorage($obj.attr("id"), "hidden", save);
       countLegends();
@@ -637,8 +641,7 @@ jQuery(document).ready(function($) {
 
   //hides base forms of legends with super-evos
   $("#show-base").on("click", function() {
-    $('.base').parent().toggleClass('hidden');
-    console.log($('.base').parent())
+    $('.base').parent().removeClass('hidden');
     $('#show-base').css('display', 'none');
     $('#hide-base').css('display', 'inline-block');
     updateStorage("evohidden", null, false);
@@ -646,7 +649,7 @@ jQuery(document).ready(function($) {
 
   //shows base forms of legends with super-evos
   $("#hide-base").on("click", function() {
-    $('.base').parent().toggleClass('hidden');
+    $('.base').parent().addClass('hidden');
     $('#hide-base').css('display', 'none');
     $('#show-base').css('display', 'inline-block');
     updateStorage("evohidden", 'true', true);
