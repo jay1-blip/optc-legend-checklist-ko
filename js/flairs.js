@@ -21,6 +21,7 @@ loadPage = function() {
     image.setAttribute('fetchpriority', index < 12 ? 'high' : 'low');
     image.width = 50;
     image.height = 50;
+    image.draggable = false;
     image.src = 'images/icons/' + character.id + '.png';
     image.alt = character.name;
     image.title = character.name + ' (No. ' + character.id + ', ★' + character.stars + ')';

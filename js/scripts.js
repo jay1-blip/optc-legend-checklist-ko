@@ -323,7 +323,8 @@ function listHidden() {
   }
 
   //unhide legends in checklist when clicked
-  $(".modal-content2 img").mousedown(function(e) {
+  $(".modal-content2 img").on("click", function(e) {
+    e.preventDefault();
     const $obj = $(this);
     var id = $obj[0].name;
     $("#"+id).parent().removeClass('disabled');
@@ -517,11 +518,11 @@ jQuery(document).ready(function($) {
   });
 
   //main function for selecting icons
-  $("#special img").mousedown(function(e) {
+  $("#special img").on("click", function(e) {
+    e.preventDefault();
     var isChecked = document.getElementById('switch').checked;
     var isChecked2 = document.getElementById('hide-legends').checked;
     var isChecked3 = document.getElementById('switch2').checked;
-    var isChecked4 = document.getElementById('check4').checked;
     var isChecked4 = document.getElementById('check4').checked;
     const $obj = $(this);
 

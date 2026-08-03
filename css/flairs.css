@@ -17,6 +17,10 @@ background-clip:padding-box;
 background-size:contain;
 display:inline-block;
 cursor:pointer;
+touch-action:manipulation;
+-webkit-tap-highlight-color:transparent;
+user-select:none;
+-webkit-user-select:none;
 }
 
 #special {

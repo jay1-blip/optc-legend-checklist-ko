@@ -14,8 +14,10 @@ opacity:0.4;
 filter:alpha(opacity=40);
 }
 
-.flair:not(.selected):hover {
-opacity:0.7;
+@media (hover:hover) and (pointer:fine) {
+  .flair:not(.selected):hover {
+    opacity:0.7;
+  }
 }
 
 .flair.selected {
