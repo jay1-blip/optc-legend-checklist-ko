@@ -249,6 +249,7 @@ function resetPage() {
 //unique legend tracker
 function countLegends() {
   countChecklist('#super-sugo', '#super-counter2', '#super-rainbow', '#super-srainbow');
+  countChecklist('#anniversary-sugo', '#anniversary-counter2', '#anniversary-rainbow', '#anniversary-srainbow');
   countChecklist('#special', '#counter2', '#rainbow', '#srainbow');
 }
 

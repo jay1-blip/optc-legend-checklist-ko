@@ -224,7 +224,8 @@ border-radius:34px;
 border-radius:50%;
 }
 
-#counter,#rainbow,#counter2,#srainbow,#super-counter2,#super-rainbow,#super-srainbow {
+#counter,#rainbow,#counter2,#srainbow,#super-counter2,#super-rainbow,#super-srainbow,
+#anniversary-counter2,#anniversary-rainbow,#anniversary-srainbow {
 display:inline-block;
 color:#eee;
 font-weight:500;

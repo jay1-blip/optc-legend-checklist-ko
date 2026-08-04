@@ -9,6 +9,12 @@ const superSugoIds = new Set([
   4387, 4388, 4432, 4441, 4443, 4451, 4453, 4490, 4491, 4492,
   4557, 4559, 4561, 4563, 4571, 4611, 4612
 ]);
+const anniversarySugoIds = new Set([
+  3613, 3745, 3755, 3830, 3832, 3839, 3880, 4011, 4012, 4029,
+  4100, 4111, 4151, 4257, 4267, 4268, 4275, 4322, 4323, 4329,
+  4367, 4391, 4418, 4469, 4476, 4477, 4521, 4522, 4529, 4576,
+  4577
+]);
 for (let index = legendCharacters.length - 1; index >= 0; index -= 1) {
   if (excludedLegendIds.has(legendCharacters[index].id)) {
     legendCharacters.splice(index, 1);
@@ -18,18 +24,23 @@ for (let index = legendCharacters.length - 1; index >= 0; index -= 1) {
 loadPage = function() {
   const regularList = document.getElementById('special');
   const superSugoList = document.getElementById('super-sugo');
+  const anniversarySugoList = document.getElementById('anniversary-sugo');
   let superSugoIndex = 0;
+  let anniversarySugoIndex = 0;
 
   legendCharacters.forEach(function(character) {
     const isSuperSugo = superSugoIds.has(character.id);
-    const enter = isSuperSugo ? superSugoList : regularList;
+    const isAnniversarySugo = anniversarySugoIds.has(character.id);
+    const enter = isSuperSugo ? superSugoList : (isAnniversarySugo ? anniversarySugoList : regularList);
     const wrapper = document.createElement('div');
     wrapper.className = 'flair-wrapper';
 
     const image = document.createElement('img');
     image.className = 'flair level-0';
     image.id = character.id;
-    image.loading = isSuperSugo && superSugoIndex < 20 ? 'eager' : 'lazy';
+    const loadImmediately = (isSuperSugo && superSugoIndex < 20) ||
+      (isAnniversarySugo && anniversarySugoIndex < 12);
+    image.loading = loadImmediately ? 'eager' : 'lazy';
     image.decoding = 'async';
     image.setAttribute('fetchpriority', isSuperSugo && superSugoIndex < 12 ? 'high' : 'low');
     image.width = 50;
@@ -49,6 +60,9 @@ loadPage = function() {
 
     if (isSuperSugo) {
       superSugoIndex += 1;
+    }
+    else if (isAnniversarySugo) {
+      anniversarySugoIndex += 1;
     }
   });
 };
