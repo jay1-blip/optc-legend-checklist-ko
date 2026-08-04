@@ -48,6 +48,28 @@ display:block;
   z-index: 100;
 }
 
+.pirate-limit-key {
+  display:none;
+  position:absolute;
+  top:-2px;
+  right:-2px;
+  z-index:110;
+  width:20px;
+  height:20px;
+  background:url(../images/pirate-limit-key.webp) center / contain no-repeat;
+  filter:drop-shadow(0 1px 1px #000);
+  pointer-events:none;
+}
+
+.flair-wrapper.pirate-limit .pirate-limit-key {
+  display:block;
+}
+
+.flair-wrapper.pirate-limit .flair-level {
+  top:15px;
+  right:1px;
+}
+
 #show-base {
   display: none;
 }
@@ -60,6 +82,15 @@ display:block;
 
   .flair-grid {
     grid-template-columns:repeat(auto-fill, 70px);
+  }
+
+  .pirate-limit-key {
+    width:26px;
+    height:26px;
+  }
+
+  .flair-wrapper.pirate-limit .flair-level {
+    top:20px;
   }
 }
 
@@ -77,6 +108,15 @@ display:block;
     grid-template-columns:repeat(auto-fill, 44px);
     gap:4px;
     padding:4px;
+  }
+
+  .pirate-limit-key {
+    width:17px;
+    height:17px;
+  }
+
+  .flair-wrapper.pirate-limit .flair-level {
+    top:13px;
   }
 }
 

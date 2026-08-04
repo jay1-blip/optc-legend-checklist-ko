@@ -7,8 +7,8 @@
   <link rel="icon" type="image/x-icon" href="red.ico">
 
   <!--stylesheets-->
-  <link rel="stylesheet" href="css/style.css" type="text/css" media="all" />
-  <link rel="stylesheet" href="css/flairs.css" type="text/css" media="all" />
+  <link rel="stylesheet" href="css/style.css?v=20260804" type="text/css" media="all" />
+  <link rel="stylesheet" href="css/flairs.css?v=20260804-key" type="text/css" media="all" />
 
 
   <!--scripts-->
@@ -19,8 +19,8 @@
       document.write('<script src="js/jquery.min.js"><\/script>');
     }
   </script>
-  <script type="text/javascript" src="js/flairs.js"></script>
-  <script type="text/javascript" src="js/scripts.js"></script>
+  <script type="text/javascript" src="js/flairs.js?v=20260804-key"></script>
+  <script type="text/javascript" src="js/scripts.js?v=20260804-key"></script>
   <script type="text/javascript" src="js/dom-to-image.js"></script>
   <script src="js/FileSaver.js"></script>
   <script src="js/lz-string.js"></script>
@@ -110,40 +110,49 @@
       </label>
 
       <label class="mode-control">
+        <input id="pirate-limit-switch" type="checkbox">
+        <span class="slider round"></span>
+        <span class="mode-text">해적제한돌</span>
+      </label>
+
+      <label class="mode-control">
         <input id="hide-legends" type="checkbox">
         <span class="slider round"></span>
         <span class="mode-text">목록에서 캐릭터 제거</span>
       </label>
     </div>
 
+    <div class="counter-row global-counter-row" aria-label="전체 캐릭터 현황">
+      <span id="counter2" class="counter-item"></span>
+      <span id="rainbow" class="counter-item"></span>
+      <span id="srainbow" class="counter-item"></span>
+    </div>
+
       <div class="icon-container">
-        <section class="checklist-section" aria-labelledby="super-sugo-title">
-          <h2 id="super-sugo-title" class="checklist-title">초스고 체크리스트</h2>
-          <div class="counter-row" aria-label="초스고 체크리스트 현황">
-            <span id="super-counter2" class="counter-item"></span>
-            <span id="super-rainbow" class="counter-item"></span>
-            <span id="super-srainbow" class="counter-item"></span>
-          </div>
-          <div id="super-sugo" class="flair-grid"></div>
-        </section>
+        <div class="featured-checklists">
+          <section class="checklist-section" aria-labelledby="super-sugo-title">
+            <h2 id="super-sugo-title" class="checklist-title">초스고 <small id="super-sugo-total" class="category-total"></small></h2>
+            <div id="super-sugo" class="flair-grid"></div>
+          </section>
 
-        <section class="checklist-section" aria-labelledby="anniversary-sugo-title">
-          <h2 id="anniversary-sugo-title" class="checklist-title">주년 스고 체크리스트</h2>
-          <div class="counter-row" aria-label="주년 스고 체크리스트 현황">
-            <span id="anniversary-counter2" class="counter-item"></span>
-            <span id="anniversary-rainbow" class="counter-item"></span>
-            <span id="anniversary-srainbow" class="counter-item"></span>
-          </div>
-          <div id="anniversary-sugo" class="flair-grid"></div>
-        </section>
+          <section class="checklist-section" aria-labelledby="anniversary-sugo-title">
+            <h2 id="anniversary-sugo-title" class="checklist-title">주년 스고 <small id="anniversary-sugo-total" class="category-total"></small></h2>
+            <div id="anniversary-sugo" class="flair-grid"></div>
+          </section>
 
-        <section class="checklist-section" aria-labelledby="regular-sugo-title">
-          <h2 id="regular-sugo-title" class="checklist-title">일반 스고 체크리스트</h2>
-          <div class="counter-row" aria-label="일반 스고 체크리스트 현황">
-            <span id="counter2" class="counter-item"></span>
-            <span id="rainbow" class="counter-item"></span>
-            <span id="srainbow" class="counter-item"></span>
-          </div>
+          <section class="checklist-section" aria-labelledby="pirate-festival-sugo-title">
+            <h2 id="pirate-festival-sugo-title" class="checklist-title">해적제 스고 <small id="pirate-festival-sugo-total" class="category-total"></small></h2>
+            <div id="pirate-festival-sugo" class="flair-grid"></div>
+          </section>
+
+          <section class="checklist-section" aria-labelledby="treasure-map-sugo-title">
+            <h2 id="treasure-map-sugo-title" class="checklist-title">트맵스고 <small id="treasure-map-sugo-total" class="category-total"></small></h2>
+            <div id="treasure-map-sugo" class="flair-grid"></div>
+          </section>
+        </div>
+
+        <section class="checklist-section regular-checklist" aria-labelledby="regular-sugo-title">
+          <h2 id="regular-sugo-title" class="checklist-title">일반 스고 <small id="regular-sugo-total" class="category-total"></small></h2>
           <div id="special" class="flair-grid"></div>
         </section>
       </div>

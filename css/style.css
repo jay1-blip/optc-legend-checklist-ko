@@ -224,8 +224,7 @@ border-radius:34px;
 border-radius:50%;
 }
 
-#counter,#rainbow,#counter2,#srainbow,#super-counter2,#super-rainbow,#super-srainbow,
-#anniversary-counter2,#anniversary-rainbow,#anniversary-srainbow {
+#counter,#rainbow,#counter2,#srainbow {
 display:inline-block;
 color:#eee;
 font-weight:500;
@@ -255,6 +254,10 @@ white-space:nowrap;
 
 .counter-item + .counter-item {
 border-left:1px solid rgba(255,255,255,.28);
+}
+
+.global-counter-row {
+margin:12px auto;
 }
 
 @media only screen and (max-width: 600px) {
@@ -310,6 +313,13 @@ box-sizing:border-box;
 width:100%;
 border:4px double #84481b;
 border-radius:3px;
+display:grid;
+grid-template-columns:minmax(280px,320px) minmax(0,1fr);
+align-items:start;
+}
+
+.featured-checklists {
+min-width:0;
 }
 
 .checklist-section {
@@ -318,6 +328,11 @@ padding:10px 8px 12px;
 
 .checklist-section + .checklist-section {
 border-top:4px double #84481b;
+}
+
+.regular-checklist {
+min-width:0;
+border-left:4px double #84481b;
 }
 
 .checklist-title {
@@ -329,8 +344,36 @@ text-align:center;
 text-shadow:1px 1px 2px #000;
 }
 
+.category-total {
+display:inline-block;
+margin-left:5px;
+color:#eee;
+font-size:12px;
+font-weight:400;
+vertical-align:middle;
+white-space:nowrap;
+text-shadow:none;
+}
+
 .checklist-section .counter-row {
 margin:0 auto 6px;
+}
+
+.featured-checklists .counter-row {
+display:grid;
+grid-template-columns:1fr;
+width:calc(100% - 12px);
+max-width:none;
+}
+
+.featured-checklists .counter-item {
+box-sizing:border-box;
+min-width:0;
+padding:2px 6px;
+}
+
+.featured-checklists .counter-item + .counter-item {
+border-left:0;
 }
 
 footer {
@@ -495,6 +538,7 @@ border: 2px dashed #ff4747;
 
   .icon-container {
     border-width:2px;
+    display:block;
   }
 
   .checklist-section {
@@ -503,6 +547,22 @@ border: 2px dashed #ff4747;
 
   .checklist-section + .checklist-section {
     border-top-width:2px;
+  }
+
+  .regular-checklist {
+    border-top:2px double #84481b;
+    border-left:0;
+  }
+
+  .featured-checklists .counter-row {
+    display:flex;
+    width:calc(100% - 24px);
+    max-width:calc(100% - 24px);
+  }
+
+  .featured-checklists .counter-item {
+    min-width:130px;
+    padding:2px 10px;
   }
 
   .checklist-title {

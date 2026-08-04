@@ -170,7 +170,11 @@ function updatePage() {
   const store = readAllStorage();
   //restore the selected class
   $.each(store, function(index, elem) {
-    if(elem['value'] == 'rainbow')
+    if(elem.key.indexOf('pirate-limit-') === 0) {
+      var pirateLimitId = elem.key.replace('pirate-limit-', '');
+      $("#" + pirateLimitId).parent().addClass("pirate-limit");
+    }
+    else if(elem['value'] == 'rainbow')
       $("#" + elem.key).addClass("rainbow selected");
     else if(elem['value'] == 'srainbow')
       $("#" + elem.key).addClass("srainbow selected");
@@ -189,6 +193,7 @@ function updatePage() {
 function selectPage() {
   var isChecked = document.getElementById('switch').checked;
   var isChecked2 = document.getElementById('switch2').checked;
+  var isPirateLimitChecked = document.getElementById('pirate-limit-switch').checked;
   var selectable = getVisibleLegends('.flair-grid');
 
   if (isChecked) {
@@ -198,6 +203,13 @@ function selectPage() {
   else if (isChecked2) {
     selectable.addClass("srainbow selected");
     selectable.removeClass("rainbow");
+  }
+  else if (isPirateLimitChecked) {
+    selectable.addClass("selected");
+    selectable.parent().addClass("pirate-limit");
+    selectable.each(function() {
+      updateStorage('pirate-limit-' + this.id, 'true', true);
+    });
   }
   else {
     //adds selected class to every icon
@@ -240,7 +252,7 @@ function resetPage() {
     $("#" + elem.key).removeClass("srainbow");
     $("#" + elem.key).parent().removeClass("disabled hidden");
   });
-  $(".flair-wrapper").removeClass("disabled hidden");
+  $(".flair-wrapper").removeClass("disabled hidden pirate-limit");
   //clears local storage
   localStorage.clear();
   $('#show-hidden').html('지운 캐릭터 복구 (' + $('.disabled').length + ')');
@@ -248,9 +260,17 @@ function resetPage() {
 
 //unique legend tracker
 function countLegends() {
-  countChecklist('#super-sugo', '#super-counter2', '#super-rainbow', '#super-srainbow');
-  countChecklist('#anniversary-sugo', '#anniversary-counter2', '#anniversary-rainbow', '#anniversary-srainbow');
-  countChecklist('#special', '#counter2', '#rainbow', '#srainbow');
+  countChecklist('.flair-grid', '#counter2', '#rainbow', '#srainbow');
+  updateCategoryTotal('#super-sugo', '#super-sugo-total');
+  updateCategoryTotal('#anniversary-sugo', '#anniversary-sugo-total');
+  updateCategoryTotal('#pirate-festival-sugo', '#pirate-festival-sugo-total');
+  updateCategoryTotal('#treasure-map-sugo', '#treasure-map-sugo-total');
+  updateCategoryTotal('#special', '#regular-sugo-total');
+}
+
+function updateCategoryTotal(containerSelector, totalLabel) {
+  var total = $(containerSelector + ' .flair').length;
+  $(totalLabel).text('총 ' + total + '종');
 }
 
 function getVisibleLegends(containerSelector) {
@@ -292,6 +312,8 @@ function listHidden() {
   $(".modal-content2").empty();
   $("#switch").prop("checked", false);
   $("#switch2").prop("checked", false);
+  $("#check4").prop("checked", false);
+  $("#pirate-limit-switch").prop("checked", false);
   $("#hide-legends").prop("checked", false);
 
   var disabled = $(".disabled")
@@ -487,19 +509,16 @@ jQuery(document).ready(function($) {
   $('#show-hidden').html('지운 캐릭터 복구 (' + $('.disabled').length + ')');
 
   //makes sure only one toggle can be flipped at a time
-  $("#switch").on("change", function(){
-    $("#hide-legends").prop("checked", false);
-    $("#switch2").prop("checked", false);
-  });
-
-  $("#switch2").on("change", function(){
-    $("#hide-legends").prop("checked", false);
-    $("#switch").prop("checked", false);
-  });
-
-  $("#hide-legends").on("change", function(){
-    $("#switch").prop("checked", false);
-    $("#switch2").prop("checked", false);
+  var modeToggleIds = ['switch', 'switch2', 'check4', 'pirate-limit-switch', 'hide-legends'];
+  $.each(modeToggleIds, function(_, activeId) {
+    $('#' + activeId).on('change', function() {
+      if (!this.checked) return;
+      $.each(modeToggleIds, function(_, otherId) {
+        if (otherId !== activeId) {
+          $('#' + otherId).prop('checked', false);
+        }
+      });
+    });
   });
 
   //main function for selecting icons
@@ -509,6 +528,7 @@ jQuery(document).ready(function($) {
     var isChecked2 = document.getElementById('hide-legends').checked;
     var isChecked3 = document.getElementById('switch2').checked;
     var isChecked4 = document.getElementById('check4').checked;
+    var isPirateLimitChecked = document.getElementById('pirate-limit-switch').checked;
     const $obj = $(this);
 
 
@@ -540,12 +560,14 @@ jQuery(document).ready(function($) {
     //hide legends toggle
     else if(isChecked2){
       $obj.parent().toggleClass("disabled");
+      $obj.parent().removeClass("pirate-limit");
       $obj.removeClass("rainbow");
       $obj.removeClass("srainbow");
       $obj.removeClass("selected");
 
       const save = $obj.parent().hasClass("disabled");
 
+      updateStorage('pirate-limit-' + $obj.attr("id"), null, false);
       updateStorage($obj.attr("id"), "hidden", save);
       countLegends();
 
@@ -573,6 +595,20 @@ jQuery(document).ready(function($) {
       else {
         updateStorage($obj.attr("id"), null, save);
       }
+      countLegends();
+    }
+    //pirate limit key toggle
+    else if(isPirateLimitChecked){
+      var wrapper = $obj.parent();
+      wrapper.toggleClass('pirate-limit');
+      var pirateLimitEnabled = wrapper.hasClass('pirate-limit');
+
+      if(pirateLimitEnabled && !$obj.hasClass('selected')) {
+        $obj.addClass('selected');
+        updateStorage($obj.attr('id'), null, true);
+      }
+
+      updateStorage('pirate-limit-' + $obj.attr('id'), 'true', pirateLimitEnabled);
       countLegends();
     }
     else if(isChecked4){
