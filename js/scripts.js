@@ -189,20 +189,21 @@ function updatePage() {
 function selectPage() {
   var isChecked = document.getElementById('switch').checked;
   var isChecked2 = document.getElementById('switch2').checked;
+  var selectable = getVisibleLegends('.flair-grid');
 
   if (isChecked) {
-    $("#special .flair:not(.disabled)").addClass("rainbow");
-    $("#special .flair:not(.disabled)").removeClass("srainbow");
+    selectable.addClass("rainbow selected");
+    selectable.removeClass("srainbow");
   }
   else if (isChecked2) {
-    $("#special .flair:not(.disabled)").addClass("srainbow");
-    $("#special .flair:not(.disabled)").removeClass("rainbow");
+    selectable.addClass("srainbow selected");
+    selectable.removeClass("rainbow");
   }
   else {
     //adds selected class to every icon
-    $("#special .flair:not(.disabled)").addClass("selected");
-    $("#special .flair:not(.disabled)").removeClass("rainbow");
-    $("#special .flair:not(.disabled)").removeClass("srainbow");
+    selectable.addClass("selected");
+    selectable.removeClass("rainbow");
+    selectable.removeClass("srainbow");
   }
 
 
@@ -247,44 +248,27 @@ function resetPage() {
 
 //unique legend tracker
 function countLegends() {
-  countLegends2();
+  countChecklist('#super-sugo', '#super-counter2', '#super-rainbow', '#super-srainbow');
+  countChecklist('#special', '#counter2', '#rainbow', '#srainbow');
 }
 
-function getVisibleLegends() {
-  return $("#special .flair").filter(function() {
+function getVisibleLegends(containerSelector) {
+  return $(containerSelector + " .flair").filter(function() {
     var wrapper = $(this).parent();
     return !wrapper.hasClass("hidden") && !wrapper.hasClass("disabled");
   });
 }
 
-//total legend tracker
-function countLegends2() {
-  var visible = getVisibleLegends();
-  var amount = visible.filter(".selected").length;
+function countChecklist(containerSelector, totalCounter, rainbowCounter, superRainbowCounter) {
+  var visible = getVisibleLegends(containerSelector);
+  var selected = visible.filter(".selected").length;
+  var rainbowed = visible.filter(".rainbow").length;
+  var superRainbowed = visible.filter(".srainbow").length;
   var total = visible.length;
 
-  $('#counter2').html("<span class='cl'>전체 캐릭터 - </span>" + amount + "/" + total);
-  countRainbows();
-  countSrainbows();
-}
-
-//rainbow tracker
-function countRainbows() {
-  var visible = getVisibleLegends();
-  var amount = visible.filter(".rainbow").length;
-  var amount2 = visible.filter(".srainbow").length;
-  var total = visible.length;
-
-  $('#rainbow').html("<span class='cl'>무지개 - </span>" + (amount + amount2) + "/" + total);
-}
-
-//super rainbow tracker
-function countSrainbows() {
-  var visible = getVisibleLegends();
-  var amount = visible.filter(".srainbow").length;
-  var total = visible.length;
-
-  $('#srainbow').html("<span class='cl'>초무지개 - </span>" + amount + "/" + total);
+  $(totalCounter).html("<span class='cl'>전체 캐릭터 - </span>" + selected + "/" + total);
+  $(rainbowCounter).html("<span class='cl'>무지개 - </span>" + (rainbowed + superRainbowed) + "/" + total);
+  $(superRainbowCounter).html("<span class='cl'>초무지개 - </span>" + superRainbowed + "/" + total);
 }
 
 //un-hides all hidden legends
@@ -518,7 +502,7 @@ jQuery(document).ready(function($) {
   });
 
   //main function for selecting icons
-  $("#special img").on("click", function(e) {
+  $(".flair-grid img").on("click", function(e) {
     e.preventDefault();
     var isChecked = document.getElementById('switch').checked;
     var isChecked2 = document.getElementById('hide-legends').checked;

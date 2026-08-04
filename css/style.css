@@ -224,7 +224,7 @@ border-radius:34px;
 border-radius:50%;
 }
 
-#counter,#rainbow,#counter2,#srainbow {
+#counter,#rainbow,#counter2,#srainbow,#super-counter2,#super-rainbow,#super-srainbow {
 display:inline-block;
 color:#eee;
 font-weight:500;
@@ -305,8 +305,31 @@ margin:20px auto -40px;
 .icon-container {
 background:url(../images/bg-main.png);
 position:relative;
+box-sizing:border-box;
+width:100%;
 border:4px double #84481b;
 border-radius:3px;
+}
+
+.checklist-section {
+padding:10px 8px 12px;
+}
+
+.checklist-section + .checklist-section {
+border-top:4px double #84481b;
+}
+
+.checklist-title {
+margin:0 auto 8px;
+color:#ffc459;
+font-size:20px;
+line-height:1.35;
+text-align:center;
+text-shadow:1px 1px 2px #000;
+}
+
+.checklist-section .counter-row {
+margin:0 auto 6px;
 }
 
 footer {
@@ -471,6 +494,18 @@ border: 2px dashed #ff4747;
 
   .icon-container {
     border-width:2px;
+  }
+
+  .checklist-section {
+    padding:8px 2px 10px;
+  }
+
+  .checklist-section + .checklist-section {
+    border-top-width:2px;
+  }
+
+  .checklist-title {
+    font-size:17px;
   }
 
   .modal, .modal2, .modal3 {
