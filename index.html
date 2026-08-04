@@ -12,7 +12,13 @@
 
 
   <!--scripts-->
-  <script type="text/javascript" src="js/jquery.min.js"></script>
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+    // Keep the checklist working even if the external library is unavailable.
+    if (!window.jQuery) {
+      document.write('<script src="js/jquery.min.js"><\/script>');
+    }
+  </script>
   <script type="text/javascript" src="js/flairs.js"></script>
   <script type="text/javascript" src="js/scripts.js"></script>
   <script type="text/javascript" src="js/dom-to-image.js"></script>
@@ -30,7 +36,6 @@
   <noscript>이 페이지를 사용하려면 JavaScript를 활성화해야 합니다.</noscript>
 
   <div class="header"></div>
-  <div class="update-note">한국어 DB 기준 최신 ★6/★6+ 캐릭터 체크리스트 · 캐릭터에 마우스를 올리면 이름과 번호가 표시됩니다.</div>
   <div class="counter-row" aria-label="체크리스트 현황">
     <span id="counter2" class="counter-item"></span>
     <span id="rainbow" class="counter-item"></span>
