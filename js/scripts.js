@@ -265,6 +265,7 @@ function countLegends() {
   updateCategoryTotal('#anniversary-sugo', '#anniversary-sugo-total');
   updateCategoryTotal('#pirate-festival-sugo', '#pirate-festival-sugo-total');
   updateCategoryTotal('#treasure-map-sugo', '#treasure-map-sugo-total');
+  updateCategoryTotal('#kizuna-sugo', '#kizuna-sugo-total');
   updateCategoryTotal('#special', '#regular-sugo-total');
 }
 
@@ -406,25 +407,102 @@ function windowOnClick(event) {
    }
 }
 
+var generatedChecklistBlob = null;
+var generatedChecklistUrl = null;
+var imageExportInProgress = false;
+
+function shouldExportNode(node) {
+  if (!node.classList) return true;
+
+  if (node.classList.contains('hidden') || node.classList.contains('disabled')) {
+    return false;
+  }
+
+  if (node.classList.contains('pirate-limit-key') &&
+      !node.parentElement.classList.contains('pirate-limit')) {
+    return false;
+  }
+
+  if (node.classList.contains('flair-level') && node.textContent === '0') {
+    return false;
+  }
+
+  return true;
+}
+
+function prepareChecklistImages(root) {
+  var images = Array.prototype.slice.call(root.querySelectorAll('img')).filter(function(img) {
+    var wrapper = img.parentElement;
+    return !wrapper.classList.contains('hidden') && !wrapper.classList.contains('disabled');
+  });
+
+  return Promise.all(images.map(function(img) {
+    if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+
+    return new Promise(function(resolve) {
+      var preloader = new Image();
+      preloader.onload = resolve;
+      preloader.onerror = resolve;
+      preloader.src = img.currentSrc || img.src;
+    });
+  }));
+}
+
 //export image function
 function generateImage() {
   toggleModal();
 
-  $(".modal-content").empty();
+  var root = $('.icon-container')[0];
+  var content = $('.modal-content');
+  var downloadButton = $('#image-download');
 
-  domtoimage.toSvg($('.icon-container')[0]).then(function (dataUrl) {
-          var img = new Image();
-          img.src = dataUrl;
-          $(".modal-content").append(img);
-  });
+  content.html('<p class="image-export-status">이미지를 생성하고 있습니다...</p>');
+  downloadButton.prop('disabled', true);
+
+  if (imageExportInProgress) return;
+  imageExportInProgress = true;
+
+  prepareChecklistImages(root)
+    .then(function() {
+      return domtoimage.toBlob(root, {
+        filter: shouldExportNode,
+        cacheBust: false,
+        imagePlaceholder: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
+      });
+    })
+    .then(function(blob) {
+      generatedChecklistBlob = blob;
+
+      if (generatedChecklistUrl) {
+        URL.revokeObjectURL(generatedChecklistUrl);
+      }
+      generatedChecklistUrl = URL.createObjectURL(blob);
+
+      var preview = new Image();
+      preview.className = 'generated-checklist-preview';
+      preview.alt = '스고체크리스트 추출 이미지';
+      preview.src = generatedChecklistUrl;
+      content.empty().append(preview);
+      downloadButton.prop('disabled', false);
+    })
+    .catch(function(error) {
+      console.error('이미지 추출 실패:', error);
+      content.html('<p class="image-export-status image-export-error">이미지 생성에 실패했습니다. 잠시 후 다시 시도해 주세요.</p>');
+    })
+    .then(function() {
+      imageExportInProgress = false;
+    });
 }
 
 
 //download feature
 function download() {
-  domtoimage.toBlob($('.icon-container')[0]).then(function (blob) {
-        window.saveAs(blob, 'OPTC-체크리스트.jpg');
-    });
+  if (generatedChecklistBlob) {
+    window.saveAs(generatedChecklistBlob, '스고체크리스트.png');
+    return;
+  }
+
+  generateImage();
 }
 
 //export localStorage

@@ -7,7 +7,7 @@
   <link rel="icon" type="image/x-icon" href="red.ico">
 
   <!--stylesheets-->
-  <link rel="stylesheet" href="css/style.css?v=20260804" type="text/css" media="all" />
+  <link rel="stylesheet" href="css/style.css?v=20260804-layout" type="text/css" media="all" />
   <link rel="stylesheet" href="css/flairs.css?v=20260804-key" type="text/css" media="all" />
 
 
@@ -19,8 +19,8 @@
       document.write('<script src="js/jquery.min.js"><\/script>');
     }
   </script>
-  <script type="text/javascript" src="js/flairs.js?v=20260804-key"></script>
-  <script type="text/javascript" src="js/scripts.js?v=20260804-key"></script>
+  <script type="text/javascript" src="js/flairs.js?v=20260804-yarl"></script>
+  <script type="text/javascript" src="js/scripts.js?v=20260804-export"></script>
   <script type="text/javascript" src="js/dom-to-image.js"></script>
   <script src="js/FileSaver.js"></script>
   <script src="js/lz-string.js"></script>
@@ -130,24 +130,29 @@
 
       <div class="icon-container">
         <div class="featured-checklists">
-          <section class="checklist-section" aria-labelledby="super-sugo-title">
+          <section class="checklist-section wide-checklist" aria-labelledby="super-sugo-title">
             <h2 id="super-sugo-title" class="checklist-title">초스고 <small id="super-sugo-total" class="category-total"></small></h2>
             <div id="super-sugo" class="flair-grid"></div>
           </section>
 
-          <section class="checklist-section" aria-labelledby="anniversary-sugo-title">
+          <section class="checklist-section wide-checklist" aria-labelledby="anniversary-sugo-title">
             <h2 id="anniversary-sugo-title" class="checklist-title">주년 스고 <small id="anniversary-sugo-total" class="category-total"></small></h2>
             <div id="anniversary-sugo" class="flair-grid"></div>
           </section>
 
-          <section class="checklist-section" aria-labelledby="pirate-festival-sugo-title">
+          <section class="checklist-section compact-checklist" aria-labelledby="pirate-festival-sugo-title">
             <h2 id="pirate-festival-sugo-title" class="checklist-title">해적제 스고 <small id="pirate-festival-sugo-total" class="category-total"></small></h2>
             <div id="pirate-festival-sugo" class="flair-grid"></div>
           </section>
 
-          <section class="checklist-section" aria-labelledby="treasure-map-sugo-title">
+          <section class="checklist-section compact-checklist" aria-labelledby="treasure-map-sugo-title">
             <h2 id="treasure-map-sugo-title" class="checklist-title">트맵스고 <small id="treasure-map-sugo-total" class="category-total"></small></h2>
             <div id="treasure-map-sugo" class="flair-grid"></div>
+          </section>
+
+          <section class="checklist-section compact-checklist" aria-labelledby="kizuna-sugo-title">
+            <h2 id="kizuna-sugo-title" class="checklist-title">유대스고 <small id="kizuna-sugo-total" class="category-total"></small></h2>
+            <div id="kizuna-sugo" class="flair-grid"></div>
           </section>
         </div>
 
