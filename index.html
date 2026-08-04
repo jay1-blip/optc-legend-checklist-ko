@@ -36,12 +36,6 @@
   <noscript>이 페이지를 사용하려면 JavaScript를 활성화해야 합니다.</noscript>
 
   <div class="header"></div>
-  <div class="counter-row" aria-label="체크리스트 현황">
-    <span id="counter2" class="counter-item"></span>
-    <span id="rainbow" class="counter-item"></span>
-    <span id="srainbow" class="counter-item"></span>
-  </div>
-
   <div class="buttons">
     <button id="select-all">전체선택</button>
     <button id="select-none">초기화</button>
@@ -123,7 +117,25 @@
     </div>
 
       <div class="icon-container">
-        <div id="special"></div>
+        <section class="checklist-section" aria-labelledby="super-sugo-title">
+          <h2 id="super-sugo-title" class="checklist-title">초스고 체크리스트</h2>
+          <div class="counter-row" aria-label="초스고 체크리스트 현황">
+            <span id="super-counter2" class="counter-item"></span>
+            <span id="super-rainbow" class="counter-item"></span>
+            <span id="super-srainbow" class="counter-item"></span>
+          </div>
+          <div id="super-sugo" class="flair-grid"></div>
+        </section>
+
+        <section class="checklist-section" aria-labelledby="regular-sugo-title">
+          <h2 id="regular-sugo-title" class="checklist-title">일반 스고 체크리스트</h2>
+          <div class="counter-row" aria-label="일반 스고 체크리스트 현황">
+            <span id="counter2" class="counter-item"></span>
+            <span id="rainbow" class="counter-item"></span>
+            <span id="srainbow" class="counter-item"></span>
+          </div>
+          <div id="special" class="flair-grid"></div>
+        </section>
       </div>
   </div>
 
