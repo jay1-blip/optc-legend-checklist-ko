@@ -260,7 +260,7 @@ function resetPage() {
 
 //unique legend tracker
 function countLegends() {
-  countChecklist('.flair-grid', '#counter2', '#rainbow', '#srainbow');
+  countChecklist('.flair-grid', '#counter2', '#rainbow', '#srainbow', '#pirate-limit-counter');
   updateCategoryTotal('#super-sugo', '#super-sugo-total');
   updateCategoryTotal('#anniversary-sugo', '#anniversary-sugo-total');
   updateCategoryTotal('#pirate-festival-sugo', '#pirate-festival-sugo-total');
@@ -270,8 +270,10 @@ function countLegends() {
 }
 
 function updateCategoryTotal(containerSelector, totalLabel) {
-  var total = $(containerSelector + ' .flair').length;
-  $(totalLabel).text('총 ' + total + '종');
+  var visible = getVisibleLegends(containerSelector);
+  var total = visible.length;
+  var unchecked = visible.filter(':not(.selected)').length;
+  $(totalLabel).html('총 ' + total + '종 <span class="category-unchecked">[-' + unchecked + ']</span>');
 }
 
 function getVisibleLegends(containerSelector) {
@@ -281,16 +283,20 @@ function getVisibleLegends(containerSelector) {
   });
 }
 
-function countChecklist(containerSelector, totalCounter, rainbowCounter, superRainbowCounter) {
+function countChecklist(containerSelector, totalCounter, rainbowCounter, superRainbowCounter, pirateLimitCounter) {
   var visible = getVisibleLegends(containerSelector);
   var selected = visible.filter(".selected").length;
   var rainbowed = visible.filter(".rainbow").length;
   var superRainbowed = visible.filter(".srainbow").length;
+  var pirateLimited = visible.filter(function() {
+    return $(this).parent().hasClass('pirate-limit');
+  }).length;
   var total = visible.length;
 
   $(totalCounter).html("<span class='cl'>전체 캐릭터 - </span>" + selected + "/" + total);
   $(rainbowCounter).html("<span class='cl'>무지개 - </span>" + (rainbowed + superRainbowed) + "/" + total);
   $(superRainbowCounter).html("<span class='cl'>초무지개 - </span>" + superRainbowed + "/" + total);
+  $(pirateLimitCounter).html("<span class='cl'>해적제한돌 - </span>" + pirateLimited + "/" + total);
 }
 
 //un-hides all hidden legends
@@ -411,41 +417,175 @@ var generatedChecklistBlob = null;
 var generatedChecklistUrl = null;
 var imageExportInProgress = false;
 
-function shouldExportNode(node) {
-  if (!node.classList) return true;
+function loadExportImage(src) {
+  return new Promise(function(resolve) {
+    var settled = false;
+    var image = new Image();
+    var timeoutId = window.setTimeout(function() {
+      if (settled) return;
+      settled = true;
+      resolve(null);
+    }, 10000);
 
-  if (node.classList.contains('hidden') || node.classList.contains('disabled')) {
-    return false;
-  }
-
-  if (node.classList.contains('pirate-limit-key') &&
-      !node.parentElement.classList.contains('pirate-limit')) {
-    return false;
-  }
-
-  if (node.classList.contains('flair-level') && node.textContent === '0') {
-    return false;
-  }
-
-  return true;
+    image.onload = function() {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeoutId);
+      resolve(image);
+    };
+    image.onerror = function() {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(timeoutId);
+      resolve(null);
+    };
+    image.src = src;
+  });
 }
 
 function prepareChecklistImages(root) {
-  var images = Array.prototype.slice.call(root.querySelectorAll('img')).filter(function(img) {
+  var images = Array.prototype.slice.call(root.querySelectorAll('.flair')).filter(function(img) {
     var wrapper = img.parentElement;
     return !wrapper.classList.contains('hidden') && !wrapper.classList.contains('disabled');
   });
 
   return Promise.all(images.map(function(img) {
-    if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+    if (img.complete && img.naturalWidth > 0) {
+      return Promise.resolve({element: img, source: img});
+    }
 
-    return new Promise(function(resolve) {
-      var preloader = new Image();
-      preloader.onload = resolve;
-      preloader.onerror = resolve;
-      preloader.src = img.currentSrc || img.src;
+    return loadExportImage(img.currentSrc || img.src).then(function(source) {
+      return {element: img, source: source};
     });
   }));
+}
+
+function drawExportBorder(context, image, x, y, width, height) {
+  if (image.classList.contains('srainbow')) {
+    var superGradient = context.createLinearGradient(x, y, x + width, y + height);
+    superGradient.addColorStop(0, '#dd6f56');
+    superGradient.addColorStop(0.2, '#f06a73');
+    superGradient.addColorStop(0.4, '#cf4ab5');
+    superGradient.addColorStop(0.6, '#53b9e1');
+    superGradient.addColorStop(0.8, '#5bfed3');
+    superGradient.addColorStop(1, '#f6c40b');
+    context.strokeStyle = superGradient;
+  }
+  else if (image.classList.contains('rainbow')) {
+    var rainbowGradient = context.createLinearGradient(x, y, x + width, y + height);
+    rainbowGradient.addColorStop(0, 'red');
+    rainbowGradient.addColorStop(0.2, 'yellow');
+    rainbowGradient.addColorStop(0.4, 'lime');
+    rainbowGradient.addColorStop(0.6, 'aqua');
+    rainbowGradient.addColorStop(0.8, 'blue');
+    rainbowGradient.addColorStop(1, 'magenta');
+    context.strokeStyle = rainbowGradient;
+  }
+  else if (image.classList.contains('selected')) {
+    context.strokeStyle = '#bb3e3e';
+  }
+  else {
+    return;
+  }
+
+  context.lineWidth = 3;
+  context.strokeRect(x + 1.5, y + 1.5, width - 3, height - 3);
+}
+
+function renderChecklistCanvas(root, preparedImages, backgroundImage, pirateKeyImage) {
+  var rootRect = root.getBoundingClientRect();
+  var width = Math.ceil(root.scrollWidth);
+  var height = Math.ceil(root.scrollHeight);
+  var canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  var context = canvas.getContext('2d');
+
+  context.fillStyle = '#3a1d09';
+  context.fillRect(0, 0, width, height);
+  if (backgroundImage) {
+    var pattern = context.createPattern(backgroundImage, 'repeat');
+    if (pattern) {
+      context.fillStyle = pattern;
+      context.fillRect(0, 0, width, height);
+    }
+  }
+
+  Array.prototype.forEach.call(root.querySelectorAll('.checklist-section'), function(section) {
+    var sectionRect = section.getBoundingClientRect();
+    var sx = Math.round(sectionRect.left - rootRect.left);
+    var sy = Math.round(sectionRect.top - rootRect.top);
+    context.strokeStyle = '#84481b';
+    context.lineWidth = 2;
+    context.strokeRect(sx + 1, sy + 1, Math.round(sectionRect.width) - 2, Math.round(sectionRect.height) - 2);
+
+    var title = section.querySelector('.checklist-title');
+    if (!title) return;
+    var titleRect = title.getBoundingClientRect();
+    var titleStyle = window.getComputedStyle(title);
+    var fontSize = parseFloat(titleStyle.fontSize) || 20;
+    context.save();
+    context.font = '600 ' + fontSize + 'px Arial, sans-serif';
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    context.fillStyle = '#ffc459';
+    context.shadowColor = '#000';
+    context.shadowBlur = 2;
+    context.fillText(title.textContent.trim(), titleRect.left - rootRect.left + titleRect.width / 2,
+      titleRect.top - rootRect.top + titleRect.height / 2);
+    context.restore();
+  });
+
+  preparedImages.forEach(function(item) {
+    var image = item.element;
+    var wrapper = image.parentElement;
+    var imageRect = image.getBoundingClientRect();
+    var x = Math.round(imageRect.left - rootRect.left);
+    var y = Math.round(imageRect.top - rootRect.top);
+    var iconWidth = Math.round(imageRect.width);
+    var iconHeight = Math.round(imageRect.height);
+
+    if (item.source) {
+      context.drawImage(item.source, x + 3, y + 3, iconWidth - 6, iconHeight - 6);
+    }
+    else {
+      context.fillStyle = '#241307';
+      context.fillRect(x + 3, y + 3, iconWidth - 6, iconHeight - 6);
+    }
+    drawExportBorder(context, image, x, y, iconWidth, iconHeight);
+
+    if (wrapper.classList.contains('pirate-limit') && pirateKeyImage) {
+      var keySize = iconWidth <= 44 ? 17 : 20;
+      context.drawImage(pirateKeyImage, x + iconWidth - keySize + 2, y - 2, keySize, keySize);
+    }
+
+    var level = wrapper.querySelector('.flair-level');
+    if (level && level.textContent !== '0') {
+      context.save();
+      context.font = 'bold 12px Arial, sans-serif';
+      context.textAlign = 'right';
+      context.textBaseline = 'top';
+      context.lineWidth = 3;
+      context.strokeStyle = '#000';
+      context.fillStyle = '#fff';
+      context.strokeText(level.textContent, x + iconWidth - 2, y + 14);
+      context.fillText(level.textContent, x + iconWidth - 2, y + 14);
+      context.restore();
+    }
+  });
+
+  context.strokeStyle = '#84481b';
+  context.lineWidth = 4;
+  context.strokeRect(2, 2, width - 4, height - 4);
+  context.lineWidth = 1;
+  context.strokeRect(6, 6, width - 12, height - 12);
+
+  return new Promise(function(resolve, reject) {
+    canvas.toBlob(function(blob) {
+      if (blob) resolve(blob);
+      else reject(new Error('PNG 변환에 실패했습니다.'));
+    }, 'image/png');
+  });
 }
 
 //export image function
@@ -462,13 +602,13 @@ function generateImage() {
   if (imageExportInProgress) return;
   imageExportInProgress = true;
 
-  prepareChecklistImages(root)
-    .then(function() {
-      return domtoimage.toBlob(root, {
-        filter: shouldExportNode,
-        cacheBust: false,
-        imagePlaceholder: 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='
-      });
+  Promise.all([
+    prepareChecklistImages(root),
+    loadExportImage('images/bg-main.png'),
+    loadExportImage('images/pirate-limit-key.webp')
+  ])
+    .then(function(results) {
+      return renderChecklistCanvas(root, results[0], results[1], results[2]);
     })
     .then(function(blob) {
       generatedChecklistBlob = blob;

@@ -242,7 +242,7 @@ border-radius:34px;
 border-radius:50%;
 }
 
-#counter,#rainbow,#counter2,#srainbow {
+#counter,#rainbow,#counter2,#srainbow,#pirate-limit-counter {
 display:inline-block;
 color:#eee;
 font-weight:500;
@@ -384,6 +384,14 @@ font-weight:400;
 vertical-align:middle;
 white-space:nowrap;
 text-shadow:none;
+}
+
+.category-unchecked {
+display:inline-block;
+margin-left:2px;
+color:#ffb6a6;
+font-size:11px;
+font-weight:600;
 }
 
 .checklist-section .counter-row {
